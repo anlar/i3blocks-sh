@@ -3,7 +3,7 @@
 command -v upower >/dev/null 2>&1 || { echo >&2 "battery_upower: command 'upower' not found, aborting"; exit 1; }
 
 
-OUTPUT_FORMAT="I3_CHARGE%% I3_STATE"
+OUTPUT_FORMAT="I3_CHARGE% I3_STATE"
 
 if [ -n "$BLOCK_INSTANCE" ]; then
   DEVICE_NAME="$BLOCK_INSTANCE"
@@ -33,8 +33,8 @@ done
 
 
 device_path="/org/freedesktop/UPower/devices/$DEVICE_NAME"
-percentage="$(upower -i $device_path | grep percentage | awk '{print $2}' | sed 's/.$//')"
-state="$(upower -i $device_path | grep state | awk '{print $2}')"
+percentage=$(upower -i "$device_path" | grep percentage | awk '{print $2}' | sed 's/.$//')
+state=$(upower -i "$device_path" | grep state | awk '{print $2}')
 
 if [ -z "$percentage" ]; then
   echo >&2 "battery_upower: percentage value for $device_path not found, aborting"
@@ -54,7 +54,7 @@ case "$state" in
 esac
 
 
-printf "$OUTPUT_FORMAT\n" |sed "s/I3_CHARGE/$percentage/g" |sed "s/I3_STATE/$state_name/g"
+printf "%s\n" "$OUTPUT_FORMAT"  |sed "s/I3_CHARGE/$percentage/g" |sed "s/I3_STATE/$state_name/g"
 printf "\n"
 
 if [ "$state" = discharging ] && [ "$percentage" -lt "$LOW_THRESHOLD" ]; then
