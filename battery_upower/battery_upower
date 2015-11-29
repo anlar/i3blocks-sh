@@ -57,6 +57,6 @@ esac
 printf "%s\n" "$OUTPUT_FORMAT"  |sed "s/I3_CHARGE/$percentage/g" |sed "s/I3_STATE/$state_name/g"
 printf "\n"
 
-if [ $state = discharging ] && [ "$percentage" -lt "$LOW_THRESHOLD" ]; then
+if [ "$state" = discharging ] && [ "$percentage" -lt "$LOW_THRESHOLD" ]; then
   echo "$URGENT_COLOR"
 fi
