@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+command -v xkb-switch >/dev/null 2>&1 || { echo >&2 "keyboard_xkb: command 'xkb-switch' not found, aborting"; exit 1; }
+
+
+OUTPUT_FORMAT="I3_LAYOUT"
+
+while getopts o: opt; do
+    case "$opt" in
+        o) OUTPUT_FORMAT="$OPTARG" ;;
+    esac
+done
+
+
+layout=$(xkb-switch)
+
+
+case $BLOCK_BUTTON in
+  1|2|3|4|5) xkb-switch -n ;;
+esac
+
+
+printf "%s\n" "$OUTPUT_FORMAT" | sed "s/I3_LAYOUT/$layout/g"
+printf "\n"
