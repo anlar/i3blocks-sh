@@ -1,0 +1,1 @@
+shellcheck battery_upower/battery_upower
