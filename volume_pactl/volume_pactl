@@ -1,0 +1,38 @@
+#! /usr/bin/env sh
+
+command -v pactl >/dev/null 2>&1 || { echo >&2 "volume_pactl: command 'pactl' not found, aborting"; exit 1; }
+
+
+OUTPUT_FORMAT='I3_VOLUME'
+SINK=$(pactl list sinks short | grep RUNNING | awk '{print $1}')
+LEVEL='5%'
+NO_SOUND='off'
+
+while getopts o: opt; do
+  case "$opt" in
+    o) OUTPUT_FORMAT="$OPTARG" ;;
+    s) SINK="$OPTARG" ;;
+    l) LEVEL="$OPTARG" ;;
+    n) NO_SOUND="$OPTARG" ;;
+  esac
+done
+
+
+mute=$(pactl list sinks | grep "Sink #$SINK" -A 999999 | grep Mute | head -n1 | awk '{print $2}')
+
+if [ "$mute" = "no" ] ; then
+  volume=$(pactl list sinks | grep "Sink #$SINK" -A 999999 | grep Volume | head -n1 | awk '{print $3}')
+else
+  volume="$NO_SOUND"
+fi
+
+
+case "$BLOCK_BUTTON" in
+  1|4) pactl set-sink-volume "$SINK" +"$LEVEL" ;;
+  3|5) pactl set-sink-volume "$SINK" -- -"$LEVEL" ;;
+  2) pactl set-sink-mute "$SINK" toggle ;;
+esac
+
+
+printf "%s\n" "$OUTPUT_FORMAT" | sed "s/I3_VOLUME/$volume/g"
+printf "\n"
