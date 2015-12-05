@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+
+OUTPUT_FORMAT="I3_STATUS [I3_UNREAD]"
+
+HIDE_INACTIVE=0
+
+if [ -n "$BLOCK_INSTANCE" ]; then
+  USERNAME="$BLOCK_INSTANCE"
+fi
+
+
+while getopts o:u:q opt; do
+  case "$opt" in
+    o) OUTPUT_FORMAT="$OPTARG" ;;
+    u) USERNAME="$OPTARG" ;;
+    q) HIDE_INACTIVE=1 ;;
+  esac
+done
+
+
+if [ -n "$USER" ]; then
+  db=$(find "$HOME/.Skype/$USERNAME/" -name main.db -print -quit)
+else
+  db=$(find "$HOME/.Skype/" -name main.db -print -quit)
+fi
+
+pgrep -f skype > /dev/null
+if [ $? -eq 0 ]; then
+  status=On
+else
+  status=Off
+
+  if [ $HIDE_INACTIVE -eq 1 ]; then
+    exit 0
+  fi
+fi
+
+unread=$(sqlite3 "$db" "select count(*) from Messages where consumption_status != 0;")
+
+
+printf "%s\n" "$OUTPUT_FORMAT" |sed "s/I3_STATUS/$status/g" |sed "s/I3_UNREAD/$unread/g"
+printf "\n"
+
