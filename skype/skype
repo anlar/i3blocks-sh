@@ -24,7 +24,7 @@ else
   db=$(find "$HOME/.Skype/" -name main.db -print -quit)
 fi
 
-pgrep -f skype > /dev/null
+pgrep -fx skype > /dev/null
 if [ $? -eq 0 ]; then
   status=On
 else
