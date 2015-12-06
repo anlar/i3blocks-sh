@@ -1,0 +1,57 @@
+#!/usr/bin/env sh
+
+OUTPUT_FORMAT="[I3_STATUS] I3_ARTIST - I3_TITLE"
+
+HIDE_INACTIVE=0
+
+if [ -n "$BLOCK_INSTANCE" ]; then
+  PLAYER="$BLOCK_INSTANCE"
+else
+  PLAYER=$(playerctl -l | head -n1)
+fi
+
+PLAYING=Play
+PAUSED=Pause
+STOPPED=Stop
+
+while getopts o:p:a:b:c:q opt; do
+  case "$opt" in
+    o) OUTPUT_FORMAT="$OPTARG" ;;
+    p) PLAYER="$OPTARG" ;;
+    a) PLAYING="$OPTARG" ;;
+    b) PAUSED="$OPTARG" ;;
+    c) STOPPED="$OPTARG" ;;
+    q) HIDE_INACTIVE=1 ;;
+  esac
+done
+
+
+artist=$(playerctl -p "$PLAYER" metadata artist)
+title=$(playerctl -p "$PLAYER" metadata title)
+status=$(playerctl -p "$PLAYER" status)
+
+if [ $? -ne 0 ];then
+  exit 1
+fi
+
+case "$status" in
+  Playing) status_name="$PLAYING" ;;
+  Paused) status_name="$PAUSED" ;;
+  Stopped) status_name="$STOPPED" ;;
+esac
+
+
+case "$BLOCK_BUTTON" in
+  1|4) playerctl -p "$PLAYER" next ;;
+  3|5) playerctl -p "$PLAYER" previous ;;
+  2) playerctl -p "$PLAYER" play-pause ;;
+esac
+
+
+if [ $HIDE_INACTIVE -eq 1 -a "$status" = Stopped ]; then
+  exit 0
+fi
+
+
+printf "%s\n" "$OUTPUT_FORMAT"  |sed "s/I3_STATUS/$status_name/g" |sed "s/I3_ARTIST/$artist/g" |sed "s/I3_TITLE/$title/g"
+printf "\n"
