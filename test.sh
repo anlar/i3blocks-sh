@@ -3,3 +3,4 @@ shellcheck -s sh keyboard_xkb/keyboard_xkb
 shellcheck -s sh volume_pactl/volume_pactl
 shellcheck -s sh skype/skype
 shellcheck -s sh playerctl/playerctl
+shellcheck -s sh openvpn/openvpn

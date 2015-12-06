@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+vpn_list=$(find /var/run/openvpn/ -name "*.pid" -exec basename {} .pid \; | sort | awk -vORS=, '{ print $1 }' | sed 's/,$/\n/')
+
+printf "%s\n" "$vpn_list"
+printf "\n"
