@@ -1,45 +1,39 @@
-#! /usr/bin/env sh
-
-command -v pactl >/dev/null 2>&1 || { echo >&2 "volume_pactl: command 'pactl' not found, aborting"; exit 1; }
-
-
-OUTPUT_FORMAT='I3_VOLUME'
+#!/usr/bin/env sh
 
 if [ -n "$BLOCK_INSTANCE" ]; then
-  SINK_NAME="$BLOCK_INSTANCE"
+  sink_name="$BLOCK_INSTANCE"
 else
-  SINK_NAME=$(pactl list sinks short | head -1 | awk '{print $2}' |sed 's/.*\.//')
+  sink_name=$(pactl list sinks short | head -1 | awk '{print $2}' |sed 's/.*\.//')
 fi
 
-LEVEL='5%'
-NO_SOUND='off'
+level='5%'
+no_sound='Off'
 
-while getopts o: opt; do
+while getopts s:l:n: opt; do
   case "$opt" in
-    o) OUTPUT_FORMAT="$OPTARG" ;;
-    s) SINK_NAME="$OPTARG" ;;
-    l) LEVEL="$OPTARG" ;;
-    n) NO_SOUND="$OPTARG" ;;
+    s) sink_name="$OPTARG" ;;
+    l) level="$OPTARG" ;;
+    n) no_sound="$OPTARG" ;;
   esac
 done
 
 
-sink=$(pactl list sinks short | grep "$SINK_NAME" | awk '{print $1}')
+sink=$(pactl list sinks short | grep "$sink_name" | awk '{print $1}')
 mute=$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep Mute | head -n1 | awk '{print $2}')
 
 if [ "$mute" = "yes" ] ; then
-  volume="$NO_SOUND"
+  volume="$no_sound"
 else
   volume=$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep Volume | head -n1 | awk '{print $3}')
 fi
 
 
 case "$BLOCK_BUTTON" in
-  1|4) pactl set-sink-volume "$sink" +"$LEVEL" ;;
-  3|5) pactl set-sink-volume "$sink" -- -"$LEVEL" ;;
+  1|4) pactl set-sink-volume "$sink" +"$level" ;;
+  3|5) pactl set-sink-volume "$sink" -- -"$level" ;;
   2) pactl set-sink-mute "$sink" toggle ;;
 esac
 
 
-printf "%s\n" "$OUTPUT_FORMAT" | sed "s/I3_VOLUME/$volume/g"
+printf "%s\n" "$volume"
 printf "\n"
