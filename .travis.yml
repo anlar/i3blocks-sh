@@ -2,8 +2,8 @@ sudo: required
 
 install:
   # shellcheck
-  - sudo wget http://ftp.debian.org/debian/pool/main/s/shellcheck/shellcheck_0.3.7-1_amd64.deb
-  - sudo dpkg -i shellcheck_0.3.7-1_amd64.deb
+  - wget http://mirrors.kernel.org/ubuntu/pool/universe/s/shellcheck/shellcheck_0.3.7-5_amd64.deb
+  - sudo dpkg -i shellcheck_0.3.7-5_amd64.deb
 
 notifications:
   email: false
