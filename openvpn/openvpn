@@ -1,6 +1,13 @@
 #!/usr/bin/env sh
 
-vpn_list=$(find /var/run/openvpn/ -name "*.pid" -exec basename {} .pid \; | sort | awk -vORS=, '{ print $1 }' | sed 's/,$/\n/')
+vpn=$(for fn in /var/run/openvpn/*.pid ; do
+  service=$(basename "$fn" .pid)
+  status=$(service openvpn status "$service")
 
-printf "%s\n" "$vpn_list"
+  case "$status" in
+    *' is running' ) printf "%s," "$service"
+  esac
+done | sort | sed 's/,$/\n/')
+
+printf "%s\n" "$vpn"
 printf "\n"
