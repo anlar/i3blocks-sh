@@ -5,3 +5,4 @@ shellcheck -s sh volume_pactl/volume_pactl
 shellcheck -s sh skype/skype
 shellcheck -s sh playerctl/playerctl
 shellcheck -s sh openvpn/openvpn
+shellcheck -s sh disk_free/disk_free
