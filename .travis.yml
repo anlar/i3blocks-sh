@@ -1,10 +1,12 @@
 language: generic
 sudo: required
 
+env:
+  - shellcheck_deb=shellcheck_0.3.7-5_amd64.deb
+
 install:
-  # shellcheck
-  - wget http://mirrors.kernel.org/ubuntu/pool/universe/s/shellcheck/shellcheck_0.3.7-5_amd64.deb
-  - sudo dpkg -i shellcheck_0.3.7-5_amd64.deb
+  - wget "https://mirrors.kernel.org/ubuntu/pool/universe/s/shellcheck/$shellcheck_deb"
+  - sudo dpkg -i "$shellcheck_deb"
 
 notifications:
   email: false
