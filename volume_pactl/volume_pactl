@@ -24,7 +24,7 @@ mute=$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep Mute | head -n1 | 
 if [ "$mute" = "yes" ] ; then
   volume="$no_sound"
 else
-  volume=$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep -P '\tVolume' | grep -P '\d+(?=%)' -o | head -1)
+  volume="$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep -P '\tVolume' | grep -P '\d+(?=%)' -o | head -1)%"
 fi
 
 
@@ -35,5 +35,5 @@ case "$BLOCK_BUTTON" in
 esac
 
 
-printf "%s%%\n" "$volume"
+printf "%s\n" "$volume"
 printf "\n"
