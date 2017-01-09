@@ -18,6 +18,7 @@ done
 song="$(deadbeef.sh --nowplaying-tf "%artist% - %title%")"
 isplaying="$(deadbeef.sh --nowplaying-tf "%isplaying%")"
 ispaused="$(deadbeef.sh --nowplaying-tf "%ispaused%")"
+isactive=1
 
 if [ "$isplaying" = '1' ]; then
 	status="$playing"
@@ -26,6 +27,7 @@ else
 		status="$paused"
 	else
 		status="$stopped"
+		isactive=0
 	fi
 fi
 
@@ -35,7 +37,7 @@ case "$BLOCK_BUTTON" in
 	2) deadbeef.sh --play-pause ;;
 esac
 
-if [ $hide_inactive -eq 1 -a "$status" = Stopped ]; then
+if [ $hide_inactive -eq 1 -a "$isactive" -eq 0 ]; then
 	exit 0
 fi
 
