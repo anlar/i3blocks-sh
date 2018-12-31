@@ -2,12 +2,12 @@
 
 vpn=$(for fn in /var/run/openvpn/*.pid ; do
   service=$(basename "$fn" .pid)
-  status=$(service openvpn status "$service")
-
+  status=$(systemctl is-active "openvpn@$service.service")
   case "$status" in
-    *' is running' ) printf "%s," "$service"
+    *'active' ) printf "%s," "$service"
   esac
 done | sort | sed 's/,$/\n/')
 
 printf "%s\n" "$vpn"
 printf "\n"
+
