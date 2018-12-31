@@ -1,24 +1,24 @@
 #!/usr/bin/env sh
 
-if [ -n "$BLOCK_INSTANCE" ]; then
-  device_name="$BLOCK_INSTANCE"
-fi
-
-low_threshold=80
+instance=$(df -hl --output='source' |grep '/dev' -m 1)
+low_threshold=50
 low_color=#FFAE00
 hide_inactive=0
 
-while getopts n:t:u:q opt; do
+if [ -n "$BLOCK_INSTANCE" ]; then
+  instance="$BLOCK_INSTANCE"
+fi
+
+while getopts t:u:q opt; do
   case "$opt" in
-    n) device_name="$OPTARG" ;;
     t) low_threshold="$OPTARG" ;;
     u) low_color="$OPTARG" ;;
     q) hide_inactive=1 ;;
   esac
 done
 
-available=$(df -h -l "$device_name" --output='source,avail' | sed 1d | awk '{print $2}')
-percentage=$(df -h -l "$device_name" --output='source,pcent' | sed 1d | awk '{sub( "%", "", $2); print $2}')
+available=$(df -h "$instance" --output='avail' | sed 1d | awk '{print $1}')
+percentage=$(df -h "$instance" --output='pcent' | sed 1d | awk '{sub( "%", "", $1); print $1}')
 
 if [ "$percentage" -lt "$low_threshold" ]; then
   if [ $hide_inactive -eq 1 ]; then
