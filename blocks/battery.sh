@@ -1,31 +1,27 @@
 #!/usr/bin/env sh
 
-if [ -n "$BLOCK_INSTANCE" ]; then
-  device_name="$BLOCK_INSTANCE"
-else
-  device_name='battery_BAT0'
-fi
-
-low_threshold=40
-low_color=#FFAE00
-
+instance=battery_BAT0
 state_chr=CHR
 state_dis=DIS
 state_full=FULL
+low_threshold=50
+low_color=#FFAE00
 
-while getopts n:t:u:c:d:f: opt; do
-    case "$opt" in
-        n) device_name="$OPTARG" ;;
-        t) low_threshold="$OPTARG" ;;
-        u) low_color="$OPTARG" ;;
-        c) state_chr="$OPTARG" ;;
-        d) state_dis="$OPTARG" ;;
-        f) state_full="$OPTARG" ;;
-    esac
+if [ -n "$BLOCK_INSTANCE" ]; then
+  instance="$BLOCK_INSTANCE"
+fi
+
+while getopts t:u:q opt; do
+  case "$opt" in
+    c) state_chr="$OPTARG" ;;
+    d) state_dis="$OPTARG" ;;
+    f) state_full="$OPTARG" ;;
+    t) low_threshold="$OPTARG" ;;
+    u) low_color="$OPTARG" ;;
+  esac
 done
 
-
-device="/org/freedesktop/UPower/devices/$device_name"
+device="/org/freedesktop/UPower/devices/$instance"
 percentage=$(upower -i "$device" | grep percentage | awk '{print $2}' | sed 's/.$//')
 state=$(upower -i "$device" | grep state | awk '{print $2}')
 
