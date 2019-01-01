@@ -2,15 +2,17 @@
 
 instance=$(pactl list sinks short | head -1 | awk '{print $2}' |sed 's/.*\.//')
 step='5%'
-no_sound='Off'
+sound_on='On'
+sound_off='Off'
 
 if [ -n "$BLOCK_INSTANCE" ]; then
   instance="$BLOCK_INSTANCE"
 fi
 
-while getopts t:u:q opt; do
+while getopts o:n:s: opt; do
   case "$opt" in
-    n) no_sound="$OPTARG" ;;
+    o) sound_on="$OPTARG" ;;
+    n) sound_off="$OPTARG" ;;
     s) step="$OPTARG" ;;
   esac
 done
@@ -19,9 +21,9 @@ sink=$(pactl list sinks short | grep "$instance" | awk '{print $1}')
 mute=$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep Mute | head -n1 | awk '{print $2}')
 
 if [ "$mute" = "yes" ] ; then
-  volume="$no_sound"
+  volume="$sound_off"
 else
-  volume="$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep -P '\tVolume' | grep -P '\d+(?=%)' -o | head -1)%"
+  volume="$sound_on $(pactl list sinks | grep "Sink #$sink" -A 999999 | grep -P '\tVolume' | grep -P '\d+(?=%)' -o | head -1)%"
 fi
 
 case "$BLOCK_BUTTON" in
@@ -31,4 +33,4 @@ case "$BLOCK_BUTTON" in
 esac
 
 printf "%s\n" "$volume"
-printf "\n"
+printf "%s\n" "$volume"

@@ -11,7 +11,7 @@ if [ -n "$BLOCK_INSTANCE" ]; then
   instance="$BLOCK_INSTANCE"
 fi
 
-while getopts t:u:q opt; do
+while getopts c:d:f:t:u: opt; do
   case "$opt" in
     c) state_chr="$OPTARG" ;;
     d) state_dis="$OPTARG" ;;
@@ -32,20 +32,16 @@ fi
 
 case "$state" in
   charging|pending-charge)
-    state_name="$state_chr"
-    ;;
+    state_name="$state_chr" ;;
   discharging|pending-discharge|empty)
-    state_name="$state_dis"
-    ;;
+    state_name="$state_dis" ;;
   fully-charged)
-    state_name="$state_full"
-    ;;
+    state_name="$state_full" ;;
 esac
-
 
 printf "%s%% %s\n" "$percentage" "$state_name"
 printf "%s%%\n" "$percentage"
 
 if [ "$state" = discharging ] && [ "$percentage" -lt "$low_threshold" ]; then
-  echo "$low_color"
+  printf "%s\n" "$low_color"
 fi
