@@ -18,6 +18,7 @@ while getopts c:d:f:t:u: opt; do
     f) state_full="$OPTARG" ;;
     t) low_threshold="$OPTARG" ;;
     u) low_color="$OPTARG" ;;
+    *) exit 1 ;;
   esac
 done
 

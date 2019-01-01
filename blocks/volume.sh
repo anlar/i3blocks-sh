@@ -14,6 +14,7 @@ while getopts o:n:s: opt; do
     o) sound_on="$OPTARG" ;;
     n) sound_off="$OPTARG" ;;
     s) step="$OPTARG" ;;
+    *) exit 1 ;;
   esac
 done
 
