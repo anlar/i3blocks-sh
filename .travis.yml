@@ -9,4 +9,4 @@ addons:
     - shellcheck
 
 script:
-  - test.sh
+  - sh test.sh
