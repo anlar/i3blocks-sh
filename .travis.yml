@@ -1,15 +1,11 @@
-language: generic
-sudo: required
+dist: xenial
 
-env:
-  - shellcheck_deb=shellcheck_0.3.7-5_amd64.deb
-
-install:
-  - wget "https://mirrors.kernel.org/ubuntu/pool/universe/s/shellcheck/$shellcheck_deb"
-  - sudo dpkg -i "$shellcheck_deb"
-
-notifications:
-  email: false
+addons:
+  apt:
+    sources:
+    - debian-sid
+    packages:
+    - shellcheck
 
 script:
   - sh test.sh
