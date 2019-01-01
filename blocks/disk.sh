@@ -14,6 +14,7 @@ while getopts t:u:q opt; do
     t) low_threshold="$OPTARG" ;;
     u) low_color="$OPTARG" ;;
     q) hide_inactive=1 ;;
+    *) exit 1 ;;
   esac
 done
 

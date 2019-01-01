@@ -16,6 +16,7 @@ while getopts a:b:c:q opt; do
     b) paused="$OPTARG" ;;
     c) stopped="$OPTARG" ;;
     q) hide_inactive=1 ;;
+    *) exit 1 ;;
   esac
 done
 

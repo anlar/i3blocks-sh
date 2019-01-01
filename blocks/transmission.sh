@@ -5,6 +5,7 @@ turtle=T
 while getopts l: opt; do
   case "$opt" in
     l) turtle="$OPTARG" ;;
+    *) exit 1 ;;
   esac
 done
 
