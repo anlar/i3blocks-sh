@@ -22,7 +22,7 @@ while getopts a:b:c:m:q opt; do
   esac
 done
 
-title="$($instance --nowplaying-tf "%artist% - %title%" | cut -c -$max_length)"
+title="$($instance --nowplaying-tf "%artist% - %title%" | cut -c -"$max_length")"
 short_title="$($instance --nowplaying-tf "%title%")"
 isplaying="$($instance --nowplaying-tf "%isplaying%")"
 ispaused="$($instance --nowplaying-tf "%ispaused%")"
