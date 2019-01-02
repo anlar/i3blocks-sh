@@ -20,7 +20,8 @@ while getopts a:b:c:q opt; do
   esac
 done
 
-song="$($instance --nowplaying-tf "%artist% - %title%")"
+title="$($instance --nowplaying-tf "%artist% - %title%")"
+short_title="$($instance --nowplaying-tf "%title%")"
 isplaying="$($instance --nowplaying-tf "%isplaying%")"
 ispaused="$($instance --nowplaying-tf "%ispaused%")"
 isactive=1
@@ -46,5 +47,5 @@ if [ "$hide_inactive" -eq 1 ] && [ "$isactive" -eq 0 ]; then
   exit 0
 fi
 
-printf "%s %s\n" "$status" "$song"
-printf "%s\n" "$song"
+printf "%s %s\n" "$status" "$title"
+printf "%s %s\n" "$status" "$short_title"
