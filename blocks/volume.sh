@@ -29,7 +29,7 @@ fi
 
 case "$BLOCK_BUTTON" in
   1|4) pactl set-sink-volume "$sink" +"$step" ;;
-  3|5) pactl set-sink-volume "$sink" -- -"$step" ;;
+  3|5) pactl set-sink-volume "$sink" -"$step" ;;
   2) pactl set-sink-mute "$sink" toggle ;;
 esac
 
