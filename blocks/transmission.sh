@@ -14,6 +14,11 @@ incomplete=$(transmission-remote -l | awk -v count=0 '$1 ~ /^[0-9]*$/ && $5 != "
 downloading=$(transmission-remote -l | awk -v count=0 '$1 ~ /^[0-9]*$/ && ($9 == "Downloading" || $10 == "Downloading") {count++} END {print count}')
 unlimited=$(transmission-remote -si | grep -c "Download speed limit: Unlimited")
 
+case "$BLOCK_BUTTON" in
+  1) transmission-remote -as >/dev/null 2>&1 ;;
+  3) transmission-remote -AS >/dev/null 2>&1 ;;
+esac
+
 if [ "$unlimited" -eq 1 ]; then
   printf "%s\n" "$total/$incomplete/$downloading"
   printf "%s\n" "$total/$incomplete/$downloading"
