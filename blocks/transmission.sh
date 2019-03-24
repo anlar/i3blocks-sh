@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
 
 turtle=T
+turtle_color=red
 
-while getopts l: opt; do
+while getopts l:k: opt; do
   case "$opt" in
     l) turtle="$OPTARG" ;;
+    k) turtle_color="$OPTARG" ;;
     *) exit 1 ;;
   esac
 done
@@ -24,6 +26,6 @@ if [ "$turtle_mode" -eq 0 ]; then
   printf "%s\n" "$total/$incomplete/$downloading"
   printf "%s\n" "$total/$incomplete/$downloading"
 else
-  printf "%s\n" "$total/$incomplete/$downloading $turtle"
-  printf "%s\n" "$total/$incomplete/$downloading $turtle"
+  printf "%s\n" "$total/$incomplete/$downloading <span foreground=\"$turtle_color\">$turtle</span>"
+  printf "%s\n" "$total/$incomplete/$downloading <span foreground=\"$turtle_color\">$turtle</span>"
 fi
