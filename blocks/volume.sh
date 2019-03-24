@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-instance=$(pactl list sinks short | head -1 | awk '{print $2}' |sed 's/.*\.//')
+instance=Master
 step='5%'
 sound_on='On'
 sound_off='Off'
@@ -18,19 +18,18 @@ while getopts o:n:s: opt; do
   esac
 done
 
-sink=$(pactl list sinks short | grep "$instance" | awk '{print $1}')
-mute=$(pactl list sinks | grep "Sink #$sink" -A 999999 | grep Mute | head -n1 | awk '{print $2}')
+mute=$(amixer -D pulse get "$instance" | grep -c '\[off\]')
 
-if [ "$mute" = "yes" ] ; then
+if [ "$mute" -gt 0 ] ; then
   volume="$sound_off"
 else
-  volume="$sound_on $(pactl list sinks | grep "Sink #$sink" -A 999999 | grep -P '\tVolume' | grep -P '\d+(?=%)' -o | head -1)%"
+  volume="$sound_on "$(amixer -D pulse get "$instance" | grep 'Left:' | awk -F'[][]' '{ print $2 }')
 fi
 
 case "$BLOCK_BUTTON" in
-  1|4) pactl set-sink-volume "$sink" +"$step" ;;
-  3|5) pactl set-sink-volume "$sink" -"$step" ;;
-  2) pactl set-sink-mute "$sink" toggle ;;
+  1|4) amixer -q -D pulse set Master "$step"+ ;;
+  3|5) amixer -q -D pulse set Master "$step"- ;;
+  2) amixer -q -D pulse sset Master toggle ;;
 esac
 
 printf "%s\n" "$volume"
