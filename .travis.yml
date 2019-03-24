@@ -2,11 +2,8 @@ dist: xenial
 language: generic
 
 addons:
-  apt:
-    sources:
-    - debian-sid
-    packages:
-    - shellcheck
+  snaps:
+  - shellcheck
 
 script:
   - sh test.sh
