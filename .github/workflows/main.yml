@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1 
-    - name: Display shellcheck version
+    - name: Print shellcheck version
       run: shellcheck --version
     - name: Run test script
       run: ./test.sh
