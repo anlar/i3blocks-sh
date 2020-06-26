@@ -6,7 +6,7 @@ else
   instance=ip
 fi
 
-status=$(curl ifconfig.co/$instance -s)
+status=$(curl ifconfig.io/$instance -s)
 
 printf '%s\n' "$status"
 printf '%s\n' "$status"
