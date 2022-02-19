@@ -1,9 +1,0 @@
-dist: xenial
-language: generic
-
-addons:
-  snaps:
-  - shellcheck
-
-script:
-  - sh test.sh
